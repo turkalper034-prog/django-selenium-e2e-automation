@@ -1,0 +1,19 @@
+{% if form.errors %}
+    <div style="color: red; background-color: #f8d7da; padding: 10px; border: 1px solid #f5c6cb; margin-bottom: 15px; border-radius: 5px;">
+        <strong>Hata!</strong> Kullanıcı adı veya şifre hatalı. Lütfen tekrar deneyin.
+    </div>
+{% endif %}
+
+
+<h2>Giriş Yap<h2>
+
+
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <button type="submit">Giriş Yap</button>
+
+</form>
+
+<p>Hesabın yok mu? <a href="{% url 'register'  %}">Kayıt Ol</a></p>

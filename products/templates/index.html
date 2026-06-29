@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sıfırdan Django Modelimiz</title>
+</head>
+<body>
+{% if messages %}
+        <div style="margin: 20px 0;">
+            {% for message in messages %}
+                <div style="padding: 15px; margin-bottom: 10px; border-radius: 4px; font-weight: bold;
+                            {% if message.tags == 'success' %} background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb;
+                            {% elif message.tags == 'warning' %} background-color: #fff3cd; color: #856404; border: 1px solid #ffeeba;
+                            {% else %} background-color: #e2e3e5; color: #383d41; border: 1px solid #d6d8db; {% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    <h1>Store Management</h1>
+    <div style="background: #f8f9fa; padding: 15px; margin-bottom: 20px; border-bottom: 1px solid #dee2e6;">
+    {% if user.is_authenticated %}
+        <p>Giriş Başarılı! Tarayıcıda Session Aktif.</p>
+        <span>Hoş geldin, <strong>{{ user.username }}</strong>!</span>
+        <a href="{% url 'change_password' %}" style="margin-left: 15px; color: blue; text-decoration: none;">[ Şifre Değiştir ]</a>
+        <a href="{% url 'logout' %}" style="margin-left: 20px; color: red;">Çıkış Yap</a>
+    {% else %}
+        <span>Ziyaretçi Modu</span> | 
+        <a href="{% url 'login' %}">Giriş Yap</a>
+    {% endif %}
+</div>
+
+    <h2>Ürün Ara(GET)</h2>
+    <form action="" method="get">
+        <input type="text" name="q" placeholder="Ürün Adı Yazın..." value="{{query}}">
+        <button type="submit">Ara</button>
+    </form>
+
+    <hr>
+
+    <h2>Yeni Ürün Ekle (POST)</h2>
+    <form action="" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        {{ form.as_p }}
+        
+        <button type="submit">Ürünü Veritabanına Kaydet</button>
+    </form>
+
+    <hr>
+
+    <h2>Kayıtlı Ürünler</h2>
+    <ul>
+        {% for urun in products %}
+            <li>
+                <strong>{{ urun.İsim }}</strong> - {{ urun.Fiyat }} TL
+                {% if urun.uploaded_file %}
+            <a href="{{ urun.uploaded_file.url }}" target="_blank">[ Dosyayı Gör ]</a>
+        {% endif %}
+                <a href="{% url 'product_delete' urun.id %}" style="color: red; margin-left: 15px; text-decoration: none;">[ Sil ]</a>
+            <br>
+                <br>
+                <small>{{ urun.Açıklama }}</small>
+            </li>
+        {% empty %}
+            <li>Henüz hiç ürün eklenmemiş veya aranan ürün bulunamadı.</li>
+        {% endfor %}
+    </ul>
+
+</body>
+</html>

@@ -1,1 +1,1 @@
-# django-selenium-e2e-automation
+# django-mongodb-auth-store
